@@ -24,6 +24,7 @@ Here are some of the documents from Apple that informed the style guide. If some
 * [Variables](#variables)
 * [Naming](#naming)
   * [Underscores](#underscores)
+* [String Format Specifiers](#string-format-specifiers)
 * [Docstrings](#docstrings)
 * [Comments](#comments)
 * [Init & Dealloc](#init-and-dealloc)
@@ -215,6 +216,20 @@ id varnm;
 ### Underscores
 
 When using properties, instance variables should always be accessed and mutated using `self.`. This means that all properties will be visually distinct, as they will all be prefaced with `self.`. Local variables should not contain underscores.
+
+## String Format Specifiers
+
+When formatting a string that includes either a `NSInteger` or `NSUInteger` value, box the value as an `NSNumber`. For example:
+
+```objc
+NSLog(@"There are %@ apples", @([apples count]));
+```
+
+On a 32-bit platform, `NSInteger` and `NSUInteger` are `int` and `unsigned int`, while on a 64-bit platform they are `long` and `unsigned long`. Boxing the value ensures that the formatted value is correct, regardless of the platform. Furthermore, it is cleaner than the alternatives of using platform-dependent string format specifiers, or always casting the value to `long` or `unsigned long`. (For more details on those approaches, see the [string format specifier documentation](https://developer.apple.com/library/ios/documentation/cocoa/conceptual/Strings/Articles/formatSpecifiers.html).)
+
+Also, thanks to the [wonders of tagged pointers](https://www.mikeash.com/pyblog/friday-qa-2012-07-27-lets-build-tagged-pointers.html), if the `NSInteger` or `NSUInteger` value is small enough, then no `NSNumber` instance is actually created.
+
+Finally, some resources on the Internet advocate using `%zd` as a specifier for `NSInteger`, and `%tu` as a specifier for `NSUInteger`. But [those specifiers work "accidentally"](http://stackoverflow.com/a/18894802/400717), and this relation is not fixed in any standard. Consequently, this approach might break in the future, and so we have moved away from it.
 
 ## Docstrings
 
