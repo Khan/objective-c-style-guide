@@ -217,6 +217,14 @@ id varnm;
 
 When using properties, instance variables should always be accessed and mutated using `self.`. This means that all properties will be visually distinct, as they will all be prefaced with `self.`. Local variables should not contain underscores.
 
+### C Functions
+
+When creating static local C functions, internal to a particular implementation, begin that method with a lowercase letter and an underscore. For example:
+
+```objc
+static CGFloat _lowPassFilter(CGFloat oldValue, CGFloat newValue, CGFloat smoothingFactor)
+```
+
 ## String Format Specifiers
 
 When formatting a string that includes either a `NSInteger` or `NSUInteger` value, box the value as an `NSNumber`. For example:
